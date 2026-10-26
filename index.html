@@ -14,10 +14,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* 귀여운 한글 폰트 적용 */
+    /* 귀여운 한글 폰트 및 배경 이미지 설정 */
     body {
       font-family: 'Gowun Dodum', sans-serif;
-      background-color: #fdfbf7;
+      background-image: url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
     .font-jua {
       font-family: 'Jua', sans-serif;
@@ -64,10 +68,13 @@
 </head>
 <body class="min-h-screen text-slate-800 relative overflow-x-hidden pb-16">
 
+  <!-- 🖼️ 배경 이미지 위 연한 흰색 반투명 오버레이 막 -->
+  <div class="fixed inset-0 bg-white/70 backdrop-blur-[1px] pointer-events-none z-0"></div>
+
   <!-- 귀여운 배경 장식 원 (파스텔 톤) -->
-  <div class="fixed -top-16 -left-16 w-64 h-64 bg-pink-200/50 rounded-full blur-3xl pointer-events-none animate-float"></div>
-  <div class="fixed top-1/3 -right-20 w-80 h-80 bg-sky-200/50 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
-  <div class="fixed -bottom-20 left-1/3 w-72 h-72 bg-amber-200/50 rounded-full blur-3xl pointer-events-none animate-float"></div>
+  <div class="fixed -top-16 -left-16 w-64 h-64 bg-pink-200/40 rounded-full blur-3xl pointer-events-none animate-float z-0"></div>
+  <div class="fixed top-1/3 -right-20 w-80 h-80 bg-sky-200/40 rounded-full blur-3xl pointer-events-none animate-float-slow z-0"></div>
+  <div class="fixed -bottom-20 left-1/3 w-72 h-72 bg-amber-200/40 rounded-full blur-3xl pointer-events-none animate-float z-0"></div>
 
   <!-- 메인 컨테이너 -->
   <main class="max-w-6xl mx-auto px-4 pt-8 sm:pt-12 relative z-10">
@@ -75,7 +82,7 @@
     <!-- 헤더 섹션 -->
     <header class="text-center mb-8 sm:mb-10">
       <!-- 귀여운 배지 -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm border border-amber-200/60">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100/90 text-amber-800 text-sm font-bold mb-4 shadow-sm border border-amber-200/80 backdrop-blur-sm">
         <span class="animate-bounce">✨</span>
         <span>오늘의 신나는 수업 도구 모음</span>
         <span class="animate-bounce">✨</span>
@@ -85,13 +92,13 @@
       <h1 class="font-jua text-4xl sm:text-5xl md:text-6xl text-slate-800 tracking-wide mb-3 drop-shadow-sm">
         🎈 우리 반 앱 진열장
       </h1>
-      <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto font-medium">
+      <p class="text-slate-700 text-base sm:text-lg max-w-xl mx-auto font-medium drop-shadow-sm">
         원하는 앱 카드를 누르면 새 탭에서 바로 열려요! 오늘도 재미있게 공부해 보아요. 😊
       </p>
     </header>
 
     <!-- 검색 및 카테고리 컨트롤 영역 -->
-    <section class="bg-white/80 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-xl shadow-pink-100/50 border-2 border-pink-100 mb-8 sm:mb-10">
+    <section class="bg-white/85 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-xl shadow-pink-100/40 border-2 border-white/80 mb-8 sm:mb-10">
       <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
         
         <!-- 검색창 -->
@@ -100,7 +107,7 @@
             type="text" 
             id="searchInput"
             placeholder="찾고 싶은 앱 이름을 써보세요..."
-            class="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-pink-400 focus:bg-white focus:outline-none transition-all text-sm sm:text-base font-medium placeholder-slate-400"
+            class="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-50/90 border-2 border-slate-200 focus:border-pink-400 focus:bg-white focus:outline-none transition-all text-sm sm:text-base font-medium placeholder-slate-400"
           >
           <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xl select-none">🔍</span>
           <button 
@@ -120,9 +127,9 @@
       </div>
 
       <!-- 앱 개수 표시 -->
-      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium px-1">
-        <span>총 <strong id="appCount" class="text-pink-500 font-jua text-base">0</strong>개의 앱이 찾아졌어요!</span>
-        <span class="hidden sm:inline text-slate-400">💡 태블릿에서도 손가락으로 가볍게 터치해요</span>
+      <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs sm:text-sm text-slate-600 font-medium px-1">
+        <span>총 <strong id="appCount" class="text-pink-600 font-jua text-base">0</strong>개의 앱이 찾아졌어요!</span>
+        <span class="hidden sm:inline text-slate-500">💡 태블릿에서도 손가락으로 가볍게 터치해요</span>
       </div>
     </section>
 
@@ -135,7 +142,7 @@
     </section>
 
     <!-- 검색 결과 없음 상태 -->
-    <div id="emptyState" class="hidden text-center py-16 bg-white/60 rounded-3xl border-2 border-dashed border-slate-200 my-6">
+    <div id="emptyState" class="hidden text-center py-16 bg-white/80 backdrop-blur-md rounded-3xl border-2 border-dashed border-slate-300 my-6">
       <div class="text-6xl mb-3 animate-bounce">🙈</div>
       <h3 class="font-jua text-2xl text-slate-700 mb-1">찾는 앱이 없어요!</h3>
       <p class="text-slate-500 text-sm">검색어나 카테고리 선택을 다시 확인해 보세요.</p>
@@ -144,9 +151,9 @@
   </main>
 
   <!-- 하단 교사 안내 패널 -->
-  <footer class="max-w-6xl mx-auto px-4 mt-12 text-center">
-    <div class="inline-block bg-white/70 backdrop-blur-sm border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-slate-600 shadow-sm max-w-2xl">
-      <p class="font-bold text-amber-800 mb-1">👩‍🏫 선생님을 위한 앱 추가 팁!</p>
+  <footer class="max-w-6xl mx-auto px-4 mt-12 text-center relative z-10">
+    <div class="inline-block bg-white/80 backdrop-blur-md border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-slate-700 shadow-sm max-w-2xl">
+      <p class="font-bold text-amber-900 mb-1">👩‍🏫 선생님을 위한 앱 추가 팁!</p>
       <p class="leading-relaxed">
         이 HTML 파일의 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono font-bold">&lt;script&gt;</code> 태그 맨 위 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono font-bold">const apps = [...]</code> 배열에<br class="hidden sm:inline">
         새로운 앱 정보를 한 줄만 덧붙여 주시면 카드가 자동으로 생성됩니다.
@@ -158,7 +165,7 @@
   <!-- JavaScript 스크립트 -->
   <script>
     // =========================================================================
-    // 🎈 [수업 앱 데이터 목록] - 요청하신 3가지 앱으로 구성되었습니다.
+    // 🎈 [수업 앱 데이터 목록]
     // =========================================================================
     const apps = [
       {
@@ -196,10 +203,10 @@
 
     // 카테고리 카드 테마 배경색
     const cardCategoryThemes = {
-      "수업": "from-sky-50/80 to-blue-50/40 border-sky-100 hover:border-sky-300",
-      "퀴즈": "from-pink-50/80 to-rose-50/40 border-pink-100 hover:border-pink-300",
-      "만들기": "from-amber-50/80 to-orange-50/40 border-amber-100 hover:border-amber-300",
-      "기타": "from-emerald-50/80 to-teal-50/40 border-emerald-100 hover:border-emerald-300"
+      "수업": "from-sky-50/90 to-blue-50/70 border-sky-200/80 hover:border-sky-300",
+      "퀴즈": "from-pink-50/90 to-rose-50/70 border-pink-200/80 hover:border-pink-300",
+      "만들기": "from-amber-50/90 to-orange-50/70 border-amber-200/80 hover:border-amber-300",
+      "기타": "from-emerald-50/90 to-teal-50/70 border-emerald-200/80 hover:border-emerald-300"
     };
 
     // 상태 변수
@@ -229,7 +236,7 @@
         const isActive = cat === currentCategory;
         const activeClass = isActive 
           ? "bg-slate-800 text-white shadow-md font-bold scale-105" 
-          : "bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium";
+          : "bg-white/80 text-slate-700 hover:bg-white font-medium shadow-sm border border-slate-200/60";
 
         return `
           <button 
@@ -293,22 +300,22 @@
             href="${escapeHtml(app.url)}" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="app-card block group relative bg-gradient-to-br ${categoryTheme} p-5 rounded-3xl border-2 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer no-underline text-inherit"
+            class="app-card block group relative bg-gradient-to-br ${categoryTheme} backdrop-blur-sm p-5 rounded-3xl border-2 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer no-underline text-inherit"
           >
-            <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/40 rounded-full blur-xl group-hover:scale-150 transition-transform pointer-events-none"></div>
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/50 rounded-full blur-xl group-hover:scale-150 transition-transform pointer-events-none"></div>
 
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="inline-block px-2.5 py-1 rounded-xl text-xs font-bold border ${badgeStyle}">
                   ${app.category || '기타'}
                 </span>
-                <span class="text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-sm font-bold">
+                <span class="text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-sm font-bold">
                   ↗
                 </span>
               </div>
 
               <div class="flex items-center gap-3 mb-2">
-                <div class="text-3xl sm:text-4xl p-2 bg-white/80 rounded-2xl shadow-sm border border-white/60 group-hover:scale-110 transition-transform">
+                <div class="text-3xl sm:text-4xl p-2 bg-white/90 rounded-2xl shadow-sm border border-white/80 group-hover:scale-110 transition-transform">
                   ${app.icon || '🚀'}
                 </div>
                 <h2 class="font-jua text-lg sm:text-xl text-slate-800 group-hover:text-pink-600 transition-colors line-clamp-1">
@@ -316,12 +323,12 @@
                 </h2>
               </div>
 
-              <p class="text-slate-600 text-xs sm:text-sm leading-snug line-clamp-2 mt-1">
+              <p class="text-slate-600 text-xs sm:text-sm leading-snug line-clamp-2 mt-1 font-medium">
                 ${escapeHtml(app.desc || '클릭하면 해당 웹사이트로 이동합니다.')}
               </p>
             </div>
 
-            <div class="mt-4 pt-2 border-t border-slate-200/50 flex items-center justify-end text-[11px] font-bold text-slate-400 group-hover:text-pink-500 transition-colors">
+            <div class="mt-4 pt-2 border-t border-slate-200/60 flex items-center justify-end text-[11px] font-bold text-slate-400 group-hover:text-pink-500 transition-colors">
               <span>바로가기</span>
               <span class="ml-1">→</span>
             </div>
