@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎈 우리 반 앱 진열장</title>
+
+  <!-- Google Fonts: Jua & Gowun Dodum (귀엽고 가독성 높은 한글 폰트) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* 귀여운 한글 폰트 적용 */
+    body {
+      font-family: 'Gowun Dodum', sans-serif;
+      background-color: #fdfbf7;
+    }
+    .font-jua {
+      font-family: 'Jua', sans-serif;
+    }
+
+    /* 부드러운 배경 파스텔 애니메이션 */
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(3deg); }
+    }
+
+    .animate-float {
+      animation: floatBubble 4s ease-in-out infinite;
+    }
+
+    .animate-float-slow {
+      animation: floatBubble 6s ease-in-out infinite 1s;
+    }
+
+    /* 카드 통통 튀는 호버 효과 */
+    .app-card {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .app-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(255, 182, 193, 0.4), 0 8px 10px -6px rgba(135, 206, 235, 0.2);
+    }
+    .app-card:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
+    /* 커스텀 스크롤바 */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #fef3c7;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #fde047;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 relative overflow-x-hidden pb-16">
+
+  <!-- 귀여운 배경 장식 원 (파스텔 톤) -->
+  <div class="fixed -top-16 -left-16 w-64 h-64 bg-pink-200/50 rounded-full blur-3xl pointer-events-none animate-float"></div>
+  <div class="fixed top-1/3 -right-20 w-80 h-80 bg-sky-200/50 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
+  <div class="fixed -bottom-20 left-1/3 w-72 h-72 bg-amber-200/50 rounded-full blur-3xl pointer-events-none animate-float"></div>
+
+  <!-- 메인 컨테이너 -->
+  <main class="max-w-6xl mx-auto px-4 pt-8 sm:pt-12 relative z-10">
+
+    <!-- 헤더 섹션 -->
+    <header class="text-center mb-8 sm:mb-10">
+      <!-- 귀여운 배지 -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm border border-amber-200/60">
+        <span class="animate-bounce">✨</span>
+        <span>오늘의 신나는 수업 도구 모음</span>
+        <span class="animate-bounce">✨</span>
+      </div>
+
+      <!-- 메인 타이틀 -->
+      <h1 class="font-jua text-4xl sm:text-5xl md:text-6xl text-slate-800 tracking-wide mb-3 drop-shadow-sm">
+        🎈 우리 반 앱 진열장
+      </h1>
+      <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto font-medium">
+        원하는 앱 카드를 누르면 새 탭에서 바로 열려요! 오늘도 재미있게 공부해 보아요. 😊
+      </p>
+    </header>
+
+    <!-- 검색 및 카테고리 컨트롤 영역 -->
+    <section class="bg-white/80 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-xl shadow-pink-100/50 border-2 border-pink-100 mb-8 sm:mb-10">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        
+        <!-- 검색창 -->
+        <div class="relative w-full md:w-80">
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="찾고 싶은 앱 이름을 써보세요..."
+            class="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-pink-400 focus:bg-white focus:outline-none transition-all text-sm sm:text-base font-medium placeholder-slate-400"
+          >
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xl select-none">🔍</span>
+          <button 
+            id="clearSearchBtn" 
+            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg font-bold p-1"
+            title="검색어 지우기"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- 카테고리 필터 버튼 목록 (JS dynamic generation) -->
+        <div id="categoryContainer" class="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto">
+          <!-- JS로 카테고리 버튼이 자동 삽입됩니다 -->
+        </div>
+
+      </div>
+
+      <!-- 앱 개수 표시 -->
+      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium px-1">
+        <span>총 <strong id="appCount" class="text-pink-500 font-jua text-base">0</strong>개의 앱이 찾아졌어요!</span>
+        <span class="hidden sm:inline text-slate-400">💡 태블릿에서도 손가락으로 가볍게 터치해요</span>
+      </div>
+    </section>
+
+    <!-- 앱 카드 그리드 영역 -->
+    <section 
+      id="appsGrid" 
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+    >
+      <!-- JS로 앱 카드가 생성됩니다 -->
+    </section>
+
+    <!-- 검색 결과 없음 상태 -->
+    <div id="emptyState" class="hidden text-center py-16 bg-white/60 rounded-3xl border-2 border-dashed border-slate-200 my-6">
+      <div class="text-6xl mb-3 animate-bounce">🙈</div>
+      <h3 class="font-jua text-2xl text-slate-700 mb-1">찾는 앱이 없어요!</h3>
+      <p class="text-slate-500 text-sm">검색어나 카테고리 선택을 다시 확인해 보세요.</p>
+    </div>
+
+  </main>
+
+  <!-- 하단 교사 안내 패널 (선생님용 팁) -->
+  <footer class="max-w-6xl mx-auto px-4 mt-12 text-center">
+    <div class="inline-block bg-white/70 backdrop-blur-sm border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-slate-600 shadow-sm max-w-2xl">
+      <p class="font-bold text-amber-800 mb-1">👩‍🏫 선생님을 위한 앱 추가 팁!</p>
+      <p class="leading-relaxed">
+        이 HTML 파일의 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono font-bold">&lt;script&gt;</code> 태그 맨 위 <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono font-bold">const apps = [...]</code> 배열에<br class="hidden sm:inline">
+        새로운 앱 정보를 한 줄만 덧붙여 주시면 카드가 자동으로 생성됩니다.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- JavaScript 스크립트 -->
+  <script>
+    // =========================================================================
+    // 🎈 [수업 앱 데이터 목록] - 선생님께서 이곳에 한 줄씩 자유롭게 추가하세요!
+    // =========================================================================
+    const apps = [
+      { name: "디지털 교과서", url: "https://webtext.edunet.net", icon: "📚", category: "수업", desc: "교과서를 컴퓨터와 태블릿으로 크게 봐요" },
+      { name: "e학습터", url: "https://cls.edunet.net", icon: "🏫", category: "수업", desc: "우리 반 온라인 교실에서 공부해요" },
+      { name: "패들렛 (Padlet)", url: "https://padlet.com", icon: "📌", category: "수업", desc: "나의 생각과 작품을 자유롭게 나눠요" },
+      { name: "카훗! (Kahoot!)", url: "https://kahoot.it", icon: "🎉", category: "퀴즈", desc: "신나는 실시간 퀴즈 대결 게임!" },
+      { name: "띵커벨", url: "https://tkbell.co.kr", icon: "🔔", category: "퀴즈", desc: "재미있는 퀴즈와 토의토론 참여하기" },
+      { name: "캔바 (Canva)", url: "https://www.canva.com", icon: "🎨", category: "만들기", desc: "멋진 포스터와 카드뉴스를 만들어요" },
+      { name: "엔트리 (Entry)", url: "https://playentry.org", icon: "🤖", category: "만들기", desc: "상상하는 대로 코딩하고 게임 만들기" },
+      { name: "구글 클래스룸", url: "https://classroom.google.com", icon: "📁", category: "수업", desc: "과제를 확인하고 작품을 제출해요" },
+      { name: "말랑말랑 타자연습", url: "https://typing.malrang.com", icon: "⌨️", category: "기타", desc: "타자 실력을 쑥쑥 키워보아요" },
+      { name: "지오지브라", url: "https://www.geogebra.org", icon: "📐", category: "수업", desc: "수학 도형과 그래프를 신나게 탐구해요" },
+      { name: "멘티미터 (Mentimeter)", url: "https://www.mentimeter.com", icon: "📊", category: "퀴즈", desc: "우리 반 전체 의견을 한눈에 보아요" },
+      { name: "퀴즈앤 (QuizN)", url: "https://www.quizn.show", icon: "🧩", category: "퀴즈", desc: "함께 푸는 재미있는 웹 퀴즈 버라이어티" }
+    ];
+    // =========================================================================
+
+    // 카테고리별 테마 색상 정의 (파스텔 톤)
+    const categoryColors = {
+      "전체": "bg-slate-800 text-white hover:bg-slate-700",
+      "수업": "bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-200",
+      "퀴즈": "bg-pink-100 text-pink-800 border-pink-200 hover:bg-pink-200",
+      "만들기": "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200",
+      "기타": "bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200"
+    };
+
+    // 카테고리 카드 테마 배경색 (카드 자체 색상)
+    const cardCategoryThemes = {
+      "수업": "from-sky-50/80 to-blue-50/40 border-sky-100 hover:border-sky-300",
+      "퀴즈": "from-pink-50/80 to-rose-50/40 border-pink-100 hover:border-pink-300",
+      "만들기": "from-amber-50/80 to-orange-50/40 border-amber-100 hover:border-amber-300",
+      "기타": "from-emerald-50/80 to-teal-50/40 border-emerald-100 hover:border-emerald-300"
+    };
+
+    // 상태 변수
+    let currentCategory = "전체";
+    let currentSearchQuery = "";
+
+    // DOM 요소 참조
+    const appsGrid = document.getElementById("appsGrid");
+    const categoryContainer = document.getElementById("categoryContainer");
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const emptyState = document.getElementById("emptyState");
+    const appCountEl = document.getElementById("appCount");
+
+    // 초기화 함수
+    function init() {
+      renderCategoryButtons();
+      renderApps();
+      setupEventListeners();
+    }
+
+    // 카테고리 필터 버튼 생성
+    function renderCategoryButtons() {
+      // apps 데이터에서 고유 카테고리 추출
+      const categories = ["전체", ...new Set(apps.map(app => app.category || "기타"))];
+
+      categoryContainer.innerHTML = categories.map(cat => {
+        const isActive = cat === currentCategory;
+        const activeClass = isActive 
+          ? "bg-slate-800 text-white shadow-md font-bold scale-105" 
+          : "bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium";
+
+        return `
+          <button 
+            type="button" 
+            onclick="setCategory('${cat}')"
+            class="px-3.5 py-1.5 rounded-2xl text-xs sm:text-sm transition-all duration-200 ${activeClass}"
+          >
+            ${getCategoryEmoji(cat)} ${cat}
+          </button>
+        `;
+      }).join("");
+    }
+
+    // 카테고리용 이모지 반환
+    function getCategoryEmoji(cat) {
+      switch(cat) {
+        case "전체": return "🌈";
+        case "수업": return "📖";
+        case "퀴즈": return "💡";
+        case "만들기": return "🎨";
+        default: return "⭐";
+      }
+    }
+
+    // 카테고리 변경 처리
+    window.setCategory = function(cat) {
+      currentCategory = cat;
+      renderCategoryButtons();
+      renderApps();
+    };
+
+    // 앱 카드 목록 렌더링
+    function renderApps() {
+      // 필터링 적용 (카테고리 & 검색어)
+      const filteredApps = apps.filter(app => {
+        const matchCategory = currentCategory === "전체" || app.category === currentCategory;
+        const query = currentSearchQuery.toLowerCase().trim();
+        const matchSearch = !query || 
+          app.name.toLowerCase().includes(query) || 
+          (app.desc && app.desc.toLowerCase().includes(query)) ||
+          (app.category && app.category.toLowerCase().includes(query));
+
+        return matchCategory && matchSearch;
+      });
+
+      // 개수 업데이트
+      appCountEl.textContent = filteredApps.length;
+
+      // 결과 없음 처리
+      if (filteredApps.length === 0) {
+        appsGrid.innerHTML = "";
+        emptyState.classList.remove("hidden");
+        return;
+      } else {
+        emptyState.classList.add("hidden");
+      }
+
+      // 카드 HTML 생성
+      appsGrid.innerHTML = filteredApps.map(app => {
+        const categoryTheme = cardCategoryThemes[app.category] || "from-slate-50 to-white border-slate-100";
+        const badgeStyle = categoryColors[app.category] || "bg-slate-100 text-slate-700";
+
+        return `
+          <a 
+            href="${escapeHtml(app.url)}" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="app-card block group relative bg-gradient-to-br ${categoryTheme} p-5 rounded-3xl border-2 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer no-underline text-inherit"
+          >
+            <!-- 은은한 상단 빛 효과 -->
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/40 rounded-full blur-xl group-hover:scale-150 transition-transform pointer-events-none"></div>
+
+            <div>
+              <!-- 상단 카테고리 배지 & 새 탭 아이콘 -->
+              <div class="flex items-center justify-between mb-3">
+                <span class="inline-block px-2.5 py-1 rounded-xl text-xs font-bold border ${badgeStyle}">
+                  ${app.category || '기타'}
+                </span>
+                <span class="text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-sm font-bold">
+                  ↗
+                </span>
+              </div>
+
+              <!-- 앱 아이콘 & 이름 -->
+              <div class="flex items-center gap-3 mb-2">
+                <div class="text-3xl sm:text-4xl p-2 bg-white/80 rounded-2xl shadow-sm border border-white/60 group-hover:scale-110 transition-transform">
+                  ${app.icon || '🚀'}
+                </div>
+                <h2 class="font-jua text-lg sm:text-xl text-slate-800 group-hover:text-pink-600 transition-colors line-clamp-1">
+                  ${escapeHtml(app.name)}
+                </h2>
+              </div>
+
+              <!-- 앱 설명 -->
+              <p class="text-slate-600 text-xs sm:text-sm leading-snug line-clamp-2 mt-1">
+                ${escapeHtml(app.desc || '클릭하면 해당 웹사이트로 이동합니다.')}
+              </p>
+            </div>
+
+            <!-- 하단 터치 유도 안내 -->
+            <div class="mt-4 pt-2 border-t border-slate-200/50 flex items-center justify-end text-[11px] font-bold text-slate-400 group-hover:text-pink-500 transition-colors">
+              <span>바로가기</span>
+              <span class="ml-1">→</span>
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    // 이벤트 리스너 등록
+    function setupEventListeners() {
+      // 실시간 검색
+      searchInput.addEventListener("input", (e) => {
+        currentSearchQuery = e.target.value;
+        if (currentSearchQuery.trim() !== "") {
+          clearSearchBtn.classList.remove("hidden");
+        } else {
+          clearSearchBtn.classList.add("hidden");
+        }
+        renderApps();
+      });
+
+      // 검색어 초기화
+      clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        currentSearchQuery = "";
+        clearSearchBtn.classList.add("hidden");
+        searchInput.focus();
+        renderApps();
+      });
+    }
+
+    // 간단한 HTML 이스케이프 함수 (보안 강화)
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // 문서 로드 완료 시 실행
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
